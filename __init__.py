@@ -4,13 +4,14 @@ import numpy as np
 
 class Dataset:
 
-    def __init__(self,excel_filename):
+    def __init__(self,excel_filename,delimiter='|'):
 
         self.filename = excel_filename
         self.data_dict = pd.read_excel(excel_filename,sheet_name=None)
         self.sheet_names = list(self.data_dict.keys())
-
-
+        self.delimiter = delimiter
+        self.col_to_split = delimiter.join(['parameter','axis','unit'])
+        
     def digest_header(self,sheet_name,skiprows=4):
         header_df = pd.read_excel(self.filename,sheet_name=sheet_name,nrows=skiprows,header=None)
         header_data = []
@@ -36,7 +37,7 @@ class Dataset:
                 last = item
 
         for col in range(ncols):
-            columns.append(';'.join([r[col] for r in header_data]))
+            columns.append(self.delimiter.join([r[col] for r in header_data if len(r[col])]))
 
         return columns
 
@@ -45,12 +46,12 @@ class Dataset:
         df = pd.read_excel(self.filename,sheet_name=sheet_name,skiprows=skiprows,header=None,names=cols)
         return df
         
-    def get_split_dfs(self,sheet_name,skiprows=4,col_to_split='parameter;axis;unit;'):
+    def get_split_dfs(self,sheet_name,skiprows=4):
         df = self.get_df(sheet_name,skiprows)
-        params = set(list(df[col_to_split]))
+        params = set(list(df[self.col_to_split]))
         out = {}
         for param in params:
-            out[param] = df[df[col_to_split]==param]
+            out[param] = df[df[self.col_to_split]==param]
         return out
     
         
@@ -61,3 +62,14 @@ class Dataset:
             print('%03d (%s): dataframe with %04d rows and columns %s'%(idx,k,len(v),v.columns))
 
         
+    def column_name_to_text(self,col_name,break_line=False):
+        """Assume that the column name consists of three strings joined by the
+        delimiter. We want to split the string into three, then delimit the first
+        two with a comma and put parens around the third (unit). Replace underscores
+        with spaces as well."""
+        toks = col_name.split(self.delimiter)
+        toks = [tok.replace('_',' ') for tok in toks]
+        if not break_line:
+            return '%s, %s (%s)'%tuple(toks)
+        else:
+            return '%s\n%s (%s)'%tuple(toks)
