@@ -1,6 +1,27 @@
 from matplotlib import pyplot as plt
 import scipy.stats as sps
 import numpy as np
+import sys,os
+
+def groupplot(means,stds,names,colors):
+    ngroups = len(means)
+    assert len(stds)==len(means)==len(names)
+    
+    group_sizes = []
+    for m in means:
+        group_sizes.append(len(m))
+
+    jitter = {}
+    for group_names in names:
+        for gn in group_names:
+            jitter[gn] = np.random.randn()*0.1
+            
+    for group_idx,(group_means,group_stds,group_names,group_colors) in enumerate(zip(means,stds,names,colors)):
+        for gm,gs,gn,gc in zip(group_means,group_stds,group_names,group_colors):
+            plt.errorbar(group_idx+jitter[gn],gm,gs,color=gc,capsize=6,linestyle='none')
+            plt.plot(group_idx+jitter[gn],gm,marker='s',color=gc,linestyle='none')
+
+    
 
 def sigboxplot(data,sig_capfrac=0.05):
     # first determine pairwise significance of comparisons
