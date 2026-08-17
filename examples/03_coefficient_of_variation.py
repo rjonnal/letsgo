@@ -12,9 +12,26 @@ pcfg.setup()
 """This script is an example of a repeatability analysis using
 intra-class correlation (ICC) and coefficient of variation (CoV)."""
 
-# folder containing all the data
-sd_root = '../data/NeuroSleep_026/NeuroSleep_026_SD_01'
-wr_root = '../data/NeuroSleep_026/NeuroSleep_026_WR_01'
+# For the purposes of this example, I have downloaded data from this link:
+#
+# https://www.dropbox.com/scl/fi/2k4izh1cbmda43qqluw89/NeuroSleep_026.zip?rlkey=ij0txd0gwfflezlz7to2dyc8a&dl=0
+#
+# and I have unzipped its contents to the following location on my computer:
+# /home/rjonnal/Dropbox/Data/eye_tracking/NeuroSleep_026/
+# This has produced the following folder structure, relative to /home/rjonnal/Dropbox/Data/eye_tracking/
+
+# ├── NeuroSleep_026
+# │   ├── NeuroSleep_026_SD_01
+# │   │   ├── 2026-07-09_13-14-14_distributional_aggregated.csv
+# │   │   ├── 2026-07-09_13-14-14_drift_non_aggregated.csv
+# │   │   ├── 2026-07-09_13-14-14_measurement_inform.csv
+# │   │   ├── 2026-07-09_13-14-14_non_distributional_parameters.csv
+# │   │   ├── 2026-07-09_13-14-14_pso_non_aggregated.csv
+# │   │   ├── 2026-07-09_13-14-14_saccade_non_aggregated.csv
+
+
+sd_root = '/home/rjonnal/Dropbox/Data/eye_tracking/NeuroSleep_026/NeuroSleep_026_SD_01'
+wr_root = '/home/rjonnal/Dropbox/Data/eye_tracking/NeuroSleep_026/NeuroSleep_026_WR_01'
 
 
 # use the measurement_inform files from the folders to determine
@@ -53,7 +70,6 @@ for wr_drift_file in wr_drift_files:
     displacement_array = dataframe['drift_displacement_HV_deg_event_name']
     displacement_mean = float(np.mean(displacement_array))
     wr_displacement_means.append(displacement_mean)
-
 
 def coefficient_of_variation(arr):
     return np.std(arr)/np.mean(arr)*100.0

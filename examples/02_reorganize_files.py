@@ -1,5 +1,5 @@
 import letsgo as lg
-import glob
+import glob,os
 
 """This example illustrates how to create a letsgo dataset and extract
 pandas dataframes from it."""
@@ -22,30 +22,17 @@ pandas dataframes from it."""
 # │   │   ├── 2026-07-09_13-14-14_saccade_non_aggregated.csv
 
 
-# filename of main CSV file
-filename = '/home/rjonnal/Dropbox/Data/eye_tracking/NeuroSleep_026/NeuroSleep_026_SD_01/2026-07-09_13-14-14_distributional_aggregated.csv'
+data_root = '/home/rjonnal/Dropbox/Data/eye_tracking/NeuroSleep_026/'
 
-# create a Dataset object
-ds = lg.Dataset(filename)
+# folders to be reorganized:
+folders = glob.glob(os.path.join(data_root,'*'))
 
-# if you want to return the CSV file as a single dataframe
-df = ds.get_df()
+# by default, letsgo.organize_by_protocol will preserve the disorganized
+# files while creating subfolders and organizing copies of the files
+for folder in folders:
+    lg.organize_by_protocol(folder)
 
-print('Full dataframe:')
-print(df)
-
-# use pandas slicing to extract the row whose 'parameter_axis_unit' is 'MEAN'
-print('MEAN row:')
-print(df[df['parameter_axis_unit']=='MEAN'])
-
-# glob all the files with that date-time stamp, load them, and print the resulting
-# dataframes, to make sure the inference of file type and skiprows is correct
-files = glob.glob('/home/rjonnal/Dropbox/Data/eye_tracking/NeuroSleep_026/NeuroSleep_026_SD_01/2026-07-09_13-14-14*.csv')
-for f in files:
-    print(f)
-    ds = lg.Dataset(f)
-    df = ds.get_df()
-    print(df.columns)
-    print(df.iloc[0])
-    print()
-    print()
+# to move the files into their subfolders and them from their previous
+# disorganized location, use delete_old=True:
+for folder in folders:
+    lg.organize_by_protocol(folder,delete_old=True)

@@ -1,8 +1,12 @@
 import letsgo as lg
-import glob
+import numpy as np
+from matplotlib import pyplot as plt
+import pandas as pd
+from letsgo import plot_configuration_manuscript as pcfg
+pcfg.setup()
 
-"""This example illustrates how to create a letsgo dataset and extract
-pandas dataframes from it."""
+"""This script illustrates how to plot parameters from individual
+patients or from groups of patients averaged together."""
 
 # For the purposes of this example, I have downloaded data from this link:
 #
@@ -23,29 +27,28 @@ pandas dataframes from it."""
 
 
 # filename of main CSV file
-filename = '/home/rjonnal/Dropbox/Data/eye_tracking/NeuroSleep_026/NeuroSleep_026_SD_01/2026-07-09_13-14-14_distributional_aggregated.csv'
+filename = '/home/rjonnal/Dropbox/Data/eye_tracking/NeuroSleep_026/NeuroSleep_026_SD_01/2026-07-09_13-14-14_trajectories.csv'
 
 # create a Dataset object
 ds = lg.Dataset(filename)
 
-# if you want to return the CSV file as a single dataframe
+# get the distributional aggregated sheet but return it as
+# a dictionary of statistics: MEAN, SD, MAX, etc.
 df = ds.get_df()
 
-print('Full dataframe:')
-print(df)
+t_s_arr = df['time_s']
+x_deg_arr = df['kf_positions_x_deg']
+y_deg_arr = df['kf_positions_y_deg']
 
-# use pandas slicing to extract the row whose 'parameter_axis_unit' is 'MEAN'
-print('MEAN row:')
-print(df[df['parameter_axis_unit']=='MEAN'])
-
-# glob all the files with that date-time stamp, load them, and print the resulting
-# dataframes, to make sure the inference of file type and skiprows is correct
-files = glob.glob('/home/rjonnal/Dropbox/Data/eye_tracking/NeuroSleep_026/NeuroSleep_026_SD_01/2026-07-09_13-14-14*.csv')
-for f in files:
-    print(f)
-    ds = lg.Dataset(f)
-    df = ds.get_df()
-    print(df.columns)
-    print(df.iloc[0])
-    print()
-    print()
+plt.figure(figsize=(8,4))
+plt.subplot(1,2,1)
+plt.plot(t_s_arr,x_deg_arr,label='x')
+plt.plot(t_s_arr,y_deg_arr,label='y')
+plt.legend()
+plt.xlabel('time (s)')
+plt.ylabel('position (deg)')
+plt.subplot(1,2,2)
+plt.plot(x_deg_arr,y_deg_arr,color='tab:red',linestyle='-')
+plt.xlabel('x position (deg)')
+plt.ylabel('y position (deg)')
+plt.show()

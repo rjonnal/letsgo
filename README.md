@@ -10,6 +10,29 @@ The data processing pipeline for eye tracking data consists of three steps:
 2. Calculation of figures of merit, e.g. bivariate contour ellipse area (BCEA), using Valentyna's software. These are stored in the files described below.
 3. Hypothesis-driven statistical analysis and visualization, using this library.
 
+## Quick start
+
+Note: I use the word 'terminal' in the ordinary way for Linux and Mac users, but Windows users should use Anaconda PowerShell (not Anaconda Prompt).
+
+1. Install a programmer-friendly text editor such as [emacs](https://www.gnu.org/software/emacs/) in Linux, or [Notepad++](https://notepad-plus-plus.org/download) in Windows. If you're more advanced and accustomed to debugging tools, you may prefer VSCode. And if you're a MATLAB user you may prefer Spyder, which is bundled with Anaconda.
+2. Install Git using your package manager (or by visiting [the Git download site](https://git-scm.com/download/) for Windows).
+3. Install [Anaconda for Python 3.X+](https://www.anaconda.com/download#downloads)
+4. If necessary, create a folder where your Python libraries will reside. Conventions in my lab are `~/code/` on Linux machines (and derivatives like macOS) and `C:\code\` on Windows machines.
+5. Add that folder to the environment variable `PYTHONPATH`. If your computer doesn't have this environment variable set yet, then create the variable and define it as the location where you will store Python libraries. If the variable exists, then append the folder from step 4 to its definition. In Linux, add `export PYTHONPATH="${PYTHONPATH}:/home/YOURUSERNAME/path"` to the bottom of your `~/.bashrc` file, and restart the terminal. Replace `YOURUSERNAME` with your Linux username. This will create the variable `PYTHONPATH` if it doesn't exist and define it as `/home/YOURUSERNAME/code`. If it exists, it will append `/homeYOURUSERNAME/code` to the existing definition. For other OS's: [Windows](https://optics.ansys.com/hc/en-us/articles/7812289531923-Create-or-modify-environment-variables-in-Windows), [Mac](https://apple.stackexchange.com/questions/381655/how-to-and-should-i-put-a-path-to-user-installed-python-ahead-of-system-instal).
+5. Open `Anaconda prompt` and type `cd c:/code` or `cd ~/code` to navigate to the relevant folder.
+6. Clone this repository into that folder by typing: `git clone https://github.com/rjonnal/letsgo`.
+7. If `git clone` doesn't work, you can download LETSGO as a [zip file](https://github.com/rjonnal/letsgo/archive/refs/heads/main.zip) instead, and unzip it into the Python library folder you created in (4).
+8. Download and unzip some example data.
+9. Open one of the scripts in `letsgo/examples` using your text editor, and edit it to point it to the example data.
+10. Navigate to the examples folder in Anaconda prompt, e.g. `cd c:\code\letsgo\examples` or `cd ~/code/letsgo/examples`.
+11. Run the example: `python 00_load_data.py`.
+
+## Slightly slower start
+
+1. Take the time to learn a few commands for the Anaconda prompt. [Here is a quick guide.](https://medium.com/@marsmans/learning-to-use-the-terminal-ccd1595250e5)
+2. Take a few-hour Python tutorial. [W3schools](https://www.w3schools.com/python/python_intro.asp) has a good introductory tutorial. [Codecademy](https://www.codecademy.com/catalog/language/python) has many more specialized tutorials, some of which are free.
+
+
 ## Ground rules
 
 1. All eye tracking data is expected in CSV file format. There are no unusual limitations imposed by working with XSLX files, but it is more complicated and bug-prone, and we have to choose one or the other, so let's choose CSV.

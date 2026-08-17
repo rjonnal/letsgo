@@ -88,13 +88,22 @@ def get_files_for_protocol(folder,protocol):
         out = out + glob.glob(os.path.join(folder,'*%s*.csv'%filt))
     return out
 
+n_header_rows = {'_distributional_aggregated':3,'_drift_non_aggregated':4,'_measurement_inform':1,'_non_distributional_parameters':1,'_pso_non_aggregated':4,'_saccade_non_aggregated':4,'_saccade_with_pso_non_aggregated':4,'_trajectories':2,'_trial_non_aggregated':4}
 
 
 class Dataset:
 
-    def __init__(self,filename,skiprows=4,delimiter='_'):
+    def __init__(self,filename,skiprows=None,delimiter='_'):
+        if skiprows is None:
+            for k in n_header_rows.keys():
+                if filename.find(k)>-1:
+                    self.skiprows = n_header_rows[k]
+                    break
+        else:
+            self.skiprows = skiprows
+        if self.skiprows is None:
+            sys.exit('letsgo.Dataset failed on %s because the number of header rows is not defined in the dictionary n_header_rows: %s'%(filename,n_header_rows))
         self.filename = filename
-        self.skiprows = skiprows
         self.delimiter = delimiter
 
     def get_df(self):
@@ -127,8 +136,15 @@ class Dataset:
                         continue
                 last = item
 
-        for col in range(ncols):
-            columns.append(self.delimiter.join([r[col] for r in header_data if len(r[col])]))
+        for col_idx in range(ncols):
+            columns.append(self.delimiter.join([r[col_idx] for r in header_data if len(r[col_idx])]))
+
+        for idx,col in enumerate(columns):
+            if idx==0:
+                continue
+            while col in columns[:idx]:
+                col = col+'_'
+            columns[idx] = col
 
         return columns
 
