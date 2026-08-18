@@ -102,14 +102,14 @@ Generally, we will try to leave the organization and names of files alone, but w
 
 In `letsgo/examples` are scripts meant to illustrate the basic functionality of `letsgo` and general approaches for data analysis problems. When someone in the group wants to know how to do something, I'll illustrate by creating a new example script and adding it to the repo. At present the following scripts are available:
 
-### `letsgo/examples/00_load_data.py`
+**`letsgo/examples/00_load_data.py`**
 
 **`letsgo/examples/01_plotting_trajectories.py`**
 
-`letsgo/examples/02_reorganize_files.py`
+**`letsgo/examples/02_reorganize_files.py`**
 
-`letsgo/examples/03_coefficient_of_variation.py`
+**`letsgo/examples/03_coefficient_of_variation.py`**
 
-`letsgo/examples/04_coefficient_of_variation_multi_session.py`
+**`letsgo/examples/04_coefficient_of_variation_multi_session.py`**
 
-`letsgo/examples/05_ttest_and_histograms.py`
+**`letsgo/examples/05_ttest_and_histograms.py`**

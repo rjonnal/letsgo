@@ -1,8 +1,8 @@
 import letsgo as lg
 import glob
 
-"""This example illustrates how to create a letsgo dataset and extract
-pandas dataframes from it."""
+"""This example tests that the various types of CSV file are all
+correctly converted to Pandas dataframes."""
 
 # For the purposes of this example, I have downloaded data from this link:
 #
@@ -22,18 +22,14 @@ pandas dataframes from it."""
 # │   │   ├── 2026-07-09_13-14-14_saccade_non_aggregated.csv
 
 
-# filename of main CSV file
-filename = '/home/rjonnal/Dropbox/Data/eye_tracking/NeuroSleep_026/NeuroSleep_026_SD_01/2026-07-09_13-14-14_distributional_aggregated.csv'
-
-# create a Dataset object
-ds = lg.Dataset(filename)
-
-# if you want to return the CSV file as a single dataframe
-df = ds.get_df()
-
-print('Full dataframe:')
-print(df)
-
-# use pandas slicing to extract the row whose 'parameter_axis_unit' is 'MEAN'
-print('MEAN row:')
-print(df[df['parameter_axis_unit']=='MEAN'])
+# glob all the files with a particular date-time stamp, load them, and print the resulting
+# dataframes, to make sure the inference of file type and skiprows is correct
+files = glob.glob('/home/rjonnal/Dropbox/Data/eye_tracking/NeuroSleep_026/NeuroSleep_026_SD_01/*/2026-07-09_13-14-14*.csv')
+for f in files:
+    print(f)
+    ds = lg.Dataset(f)
+    df = ds.get_df()
+    print(df.columns)
+    print(df.iloc[0])
+    print()
+    print()
