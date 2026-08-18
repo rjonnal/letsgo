@@ -36,3 +36,5 @@ for folder in folders:
 # disorganized location, use delete_old=True:
 # for folder in folders:
 #     lg.organize_by_protocol(folder,delete_old=True)
+# NB: if you run this step, earlier examples (00_load_data.py and 01_plot_trajectories.py) will
+# need to be modified to account for the changes in path that result from reorganization.
