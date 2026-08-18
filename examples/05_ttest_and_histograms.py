@@ -6,7 +6,6 @@ from letsgo import plot_configuration_manuscript as pcfg
 from letsgo import plotting as lgp
 import scipy.stats as sps
 import os,sys,glob,re
-import scipy.stats as sps
 
 pcfg.setup()
 
@@ -22,13 +21,13 @@ intra-class correlation (ICC) and coefficient of variation (CoV)."""
 # This has produced the following folder structure, relative to /home/rjonnal/Dropbox/Data/eye_tracking/
 
 # ├── NeuroSleep_026
-# │   ├── NeuroSleep_026_SD_01
-# │   │   ├── 2026-07-09_13-14-14_distributional_aggregated.csv
-# │   │   ├── 2026-07-09_13-14-14_drift_non_aggregated.csv
-# │   │   ├── 2026-07-09_13-14-14_measurement_inform.csv
-# │   │   ├── 2026-07-09_13-14-14_non_distributional_parameters.csv
-# │   │   ├── 2026-07-09_13-14-14_pso_non_aggregated.csv
-# │   │   ├── 2026-07-09_13-14-14_saccade_non_aggregated.csv
+# │   ├── NeuroSleep_026_SD_01
+# │   │   ├── 2026-07-09_13-14-14_distributional_aggregated.csv
+# │   │   ├── 2026-07-09_13-14-14_drift_non_aggregated.csv
+# │   │   ├── 2026-07-09_13-14-14_measurement_inform.csv
+# │   │   ├── 2026-07-09_13-14-14_non_distributional_parameters.csv
+# │   │   ├── 2026-07-09_13-14-14_pso_non_aggregated.csv
+# │   │   ├── 2026-07-09_13-14-14_saccade_non_aggregated.csv
 
 
 # assume we are interested in the Fixation_30s_PF protocol and _drift_non_aggregated files
@@ -62,9 +61,28 @@ for wr_file in wr_files:
     displacement_mean = float(np.mean(displacement_array))
     wr_displacement_means.append(displacement_mean)
 
-def coefficient_of_variation(arr):
-    return np.std(arr)/np.mean(arr)*100.0
+# unpaired t-test
+t_stat, p_value = sps.ttest_ind(sd_displacement_means,wr_displacement_means,equal_var=True)
+print('T-test: t = %0.3f, p = %0.3f'%(t_stat,p_value))
 
-print('CoV (SD): ',coefficient_of_variation(sd_displacement_means))
-print('CoV (WR): ',coefficient_of_variation(wr_displacement_means))
+# plot distributions
+mmin = np.min(sd_displacement_means+wr_displacement_means)
+mmax = np.max(sd_displacement_means+wr_displacement_means)
 
+n_bins = 8
+bin_edges = np.linspace(mmin,mmax,n_bins)
+bin_lefts = bin_edges[:-1]
+bin_rights = bin_edges[1:]
+bin_centers = (bin_lefts+bin_rights)/2.0
+bin_width = bin_edges[1]-bin_edges[0]
+
+
+wr_counts,_ = np.histogram(wr_displacement_means,bin_edges)
+sd_counts,_ = np.histogram(sd_displacement_means,bin_edges)
+
+plt.bar(bin_centers,sd_counts,width=bin_width*.9,alpha=0.5,label='SD')
+plt.bar(bin_centers,wr_counts,width=bin_width*.9,alpha=0.5,label='WR')
+plt.ylabel('trial count')
+plt.xlabel('drift displacement (deg)')
+plt.legend()
+plt.show()

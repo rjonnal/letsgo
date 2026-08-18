@@ -40,7 +40,7 @@ t_s_arr = df['time_s']
 x_deg_arr = df['kf_positions_x_deg']
 y_deg_arr = df['kf_positions_y_deg']
 
-plt.figure(figsize=(8,4))
+plt.figure(figsize=(6.5,4))
 plt.subplot(1,2,1)
 plt.plot(t_s_arr,x_deg_arr,label='x')
 plt.plot(t_s_arr,y_deg_arr,label='y')

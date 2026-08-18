@@ -18,13 +18,13 @@ Note: I use the word 'terminal' in the ordinary way for Linux and Mac users, but
 2. Install Git using your package manager (or by visiting [the Git download site](https://git-scm.com/download/) for Windows).
 3. Install [Anaconda for Python 3.X+](https://www.anaconda.com/download#downloads)
 4. If necessary, create a folder where your Python libraries will reside. Conventions in my lab are `~/code/` on Linux machines (and derivatives like macOS) and `C:\code\` on Windows machines.
-5. Add that folder to the environment variable `PYTHONPATH`. If your computer doesn't have this environment variable set yet, then create the variable and define it as the location where you will store Python libraries. If the variable exists, then append the folder from step 4 to its definition. In Linux, add `export PYTHONPATH="${PYTHONPATH}:/home/YOURUSERNAME/path"` to the bottom of your `~/.bashrc` file, and restart the terminal. Replace `YOURUSERNAME` with your Linux username. This will create the variable `PYTHONPATH` if it doesn't exist and define it as `/home/YOURUSERNAME/code`. If it exists, it will append `/homeYOURUSERNAME/code` to the existing definition. For other OS's: [Windows](https://optics.ansys.com/hc/en-us/articles/7812289531923-Create-or-modify-environment-variables-in-Windows), [Mac](https://apple.stackexchange.com/questions/381655/how-to-and-should-i-put-a-path-to-user-installed-python-ahead-of-system-instal).
+5. Add that folder to the environment variable `PYTHONPATH`. If your computer doesn't have this environment variable set yet, then create the variable and define it as the location where you will store Python libraries. If the variable exists, then append the folder from step 4 to its definition. In Linux, add `export PYTHONPATH="${PYTHONPATH}:/home/YOURUSERNAME/code"` to the bottom of your `~/.bashrc` file, and restart the terminal. Replace `YOURUSERNAME` with your Linux username. This will create the variable `PYTHONPATH` if it doesn't exist and define it as `/home/YOURUSERNAME/code`. If it exists, it will append `/home/YOURUSERNAME/code` to the existing definition. For other OS's: [Windows](https://optics.ansys.com/hc/en-us/articles/7812289531923-Create-or-modify-environment-variables-in-Windows), [Mac](https://apple.stackexchange.com/questions/381655/how-to-and-should-i-put-a-path-to-user-installed-python-ahead-of-system-instal).
 5. Open `Anaconda prompt` and type `cd c:/code` or `cd ~/code` to navigate to the relevant folder.
 6. Clone this repository into that folder by typing: `git clone https://github.com/rjonnal/letsgo`.
 7. If `git clone` doesn't work, you can download LETSGO as a [zip file](https://github.com/rjonnal/letsgo/archive/refs/heads/main.zip) instead, and unzip it into the Python library folder you created in (4).
 8. Download and unzip some example data.
 9. Open one of the scripts in `letsgo/examples` using your text editor, and edit it to point it to the example data.
-10. Navigate to the examples folder in Anaconda prompt, e.g. `cd c:\code\letsgo\examples` or `cd ~/code/letsgo/examples`.
+10. Navigate to the examples folder in the terminal, e.g. `cd c:\code\letsgo\examples` or `cd ~/code/letsgo/examples`.
 11. Run the example: `python 00_load_data.py`.
 
 ## Slightly slower start
@@ -49,6 +49,7 @@ Note: I use the word 'terminal' in the ordinary way for Linux and Mac users, but
    ...pso_non_aggregated.csv
    ...saccade_non_aggregated.csv
    ...saccade_with_pso_non_aggregated.csv
+   ...trajectories.csv
    ...trial_non_aggregated.csv
    ```
 
@@ -62,6 +63,7 @@ Note: I use the word 'terminal' in the ordinary way for Linux and Mac users, but
    2026-07-07_13-32-34_pso_non_aggregated.csv
    2026-07-07_13-32-34_saccade_non_aggregated.csv
    2026-07-07_13-32-34_saccade_with_pso_non_aggregated.csv
+   2026-07-07_13-32-34_trajectories.csv
    2026-07-07_13-32-34_trial_non_aggregated.csv
    ```
 
@@ -95,3 +97,19 @@ Note: I use the word 'terminal' in the ordinary way for Linux and Mac users, but
 ## Reorganization of files
 
 Generally, we will try to leave the organization and names of files alone, but with the following exception. The filenames listed above, all resulting from a single trial, are identical regardless of the experimental protocol (i.e., fixation, saccade, etc.). As a first step, to clarify the relevance of the files and directions for downstream analysis, these will be reorganized according to protocol. The function `letsgo.organize_by_protocol` takes a folder as an argument, inspects the `...measurement_inform.csv` file to determine the name of the protocol, and then moves files into subfolders according to protocol.
+
+## Example scripts
+
+In `letsgo/examples` are scripts meant to illustrate the basic functionality of `letsgo` and general approaches for data analysis problems. When someone in the group wants to know how to do something, I'll illustrate by creating a new example script and adding it to the repo. At present the following scripts are available:
+
+### `letsgo/examples/00_load_data.py`
+
+**`letsgo/examples/01_plotting_trajectories.py`**
+
+`letsgo/examples/02_reorganize_files.py`
+
+`letsgo/examples/03_coefficient_of_variation.py`
+
+`letsgo/examples/04_coefficient_of_variation_multi_session.py`
+
+`letsgo/examples/05_ttest_and_histograms.py`

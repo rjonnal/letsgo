@@ -34,5 +34,5 @@ for folder in folders:
 
 # to move the files into their subfolders and them from their previous
 # disorganized location, use delete_old=True:
-for folder in folders:
-    lg.organize_by_protocol(folder,delete_old=True)
+# for folder in folders:
+#     lg.organize_by_protocol(folder,delete_old=True)
