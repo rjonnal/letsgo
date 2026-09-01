@@ -30,7 +30,7 @@ folders = glob.glob(os.path.join(data_root,'*'))
 # by default, letsgo.organize_by_protocol will preserve the disorganized
 # files while creating subfolders and organizing copies of the files
 for folder in folders:
-    lg.organize_by_protocol(folder)
+    lg.organize_by_protocol(folder,delete_old=False)
 
 # to move the files into their subfolders and them from their previous
 # disorganized location, use delete_old=True:
