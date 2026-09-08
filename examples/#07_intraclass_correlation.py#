@@ -30,7 +30,6 @@ intra-class correlation (ICC) and coefficient of variation (CoV)."""
 # │   │   ├── 2026-07-09_13-14-14_saccade_non_aggregated.csv
 
 # For this example, we'll test the reliability of well-rested measurements
-sd_root = '/home/rjonnal/Dropbox/Data/eye_tracking/NeuroSleep_026/NeuroSleep_026_SD_01'
 wr_root = '/home/rjonnal/Dropbox/Data/eye_tracking/NeuroSleep_026/NeuroSleep_026_WR_01'
 
 
