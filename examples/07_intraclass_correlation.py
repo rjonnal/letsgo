@@ -75,6 +75,9 @@ for subject in subjects:
     # enumerate the sessions
     session_folders = glob.glob(os.path.join(subject_folder,'%s_%s*'%(subject,condition_flag)))
     session_folders.sort()
+    for f in glob.glob(os.path.join(session_folders[0],'*')):
+        print("'%s',"%os.path.split(f)[1],end='')
+    sys.exit()
     protocol_folders = [os.path.join(sf,protocol) for sf in session_folders]
 
     for pf in protocol_folders:
@@ -99,7 +102,6 @@ for subject in subjects:
         # make a letsgo dataset for each csv file, and get the pandas dataframe
         ds = lg.Dataset(csv_file)
         df = ds.get_df()
-
         # extract the parameter from that file, convert to float, and make sure
         # it's not a nan
         param = df[df['parameter_axis_unit']=='value'][parameter].iloc[0]
@@ -129,5 +131,5 @@ icc_results_all = pg.intraclass_corr(data=data_df, targets='subject', raters='tr
 # that ICC2 (what we want for reliability testing) is called 'ICC(A,1)'
 icc2 = icc_results_all[icc_results_all['Type']=='ICC(A,1)']
 
-print(icc2)
+print(float(icc2['ICC'].iloc[0]))
 
