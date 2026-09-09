@@ -6,6 +6,7 @@ from letsgo import plot_configuration_manuscript as pcfg
 from letsgo import plotting as lgp
 import scipy.stats as sps
 import os,sys,glob,re
+import pingouin as pg
 
 pcfg.setup()
 
@@ -60,9 +61,11 @@ for subject in subjects:
 
 # define a condition flag to easily run this on either condition WR or SD
 condition_flag = 'WR'
+#condition_flag = 'SD'
 
-# define the protocol of interest
+# define the protocol and parameter of interest
 protocol = 'Fixation_30s_PF'
+parameter = 'BCEA95_HV_deg^2'
 
 # identify trials for each subject
 trials = {}
@@ -74,54 +77,57 @@ for subject in subjects:
     session_folders.sort()
     protocol_folders = [os.path.join(sf,protocol) for sf in session_folders]
 
-    print(subject)
-    print(protocol_folders)
-    
-    
+    for pf in protocol_folders:
+        trials[subject] = trials[subject] + sorted(glob.glob(os.path.join(pf,'*non_distributional_parameters.csv')))
 
 
+# all subjects must have the same number of trials, so we can't use all the files
+# let's determine the smallest number of trials, and limit every subject to that number
+n_trials_per_subject = [len(trials[s]) for s in subjects]
+n_trials = np.min(n_trials_per_subject)
 
+# now build the lists that will be the values in the data dataframe (see icc_toy_example.py)
+subject_rows = []
+trial_rows = []
+data_rows = []
 
+for subject in subjects:
+    # number the trials the same for each subject, so restart trial number
+    # at 1 for each subject
+    trial_number = 1
+    for csv_file in trials[subject]:
+        # make a letsgo dataset for each csv file, and get the pandas dataframe
+        ds = lg.Dataset(csv_file)
+        df = ds.get_df()
 
-wr_root = '/home/rjonnal/Dropbox/Data/eye_tracking/NeuroSleep_026/NeuroSleep_026_WR_01'
+        # extract the parameter from that file, convert to float, and make sure
+        # it's not a nan
+        param = df[df['parameter_axis_unit']=='value'][parameter].iloc[0]
+        param = float(param)
+        if np.isnan(param):
+            continue
+        
+        # add the new row of data to the parallel lists
+        subject_rows.append(subject)
+        trial_rows.append('Trial_%03d'%trial_number)
+        data_rows.append(param)
+        
+        trial_number+=1
+        if trial_number>n_trials:
+            break
 
+# make a dict out of the lists of values and use this dict to make a dataframe
+data_df = pd.DataFrame({'subject':subject_rows,'trial':trial_rows,parameter:data_rows})
 
-# use the measurement_inform files from the folders to determine
-# the protocol, and then organize the data files by protocol
-lg.organize_by_protocol(sd_root,delete_old=True)
-lg.organize_by_protocol(wr_root,delete_old=True)
+# write the data_df to a csv file for visual inspection
+data_df.to_csv('temp.csv')
 
-# assume we are interested in the Fixation_30s_PF protocol
-sd_root = os.path.join(sd_root, 'Fixation_30s_PF')
-wr_root = os.path.join(wr_root, 'Fixation_30s_PF')
+# compute the ICC
+icc_results_all = pg.intraclass_corr(data=data_df, targets='subject', raters='trial', ratings=parameter)
 
+# see comment in https://github.com/raphaelvallat/pingouin/issues/485 suggesting
+# that ICC2 (what we want for reliability testing) is called 'ICC(A,1)'
+icc2 = icc_results_all[icc_results_all['Type']=='ICC(A,1)']
 
-# assume we are interested in the drift data
-# we'll sort them so that we can do file-for-file comparisons later w/o
-# having to check filenames
-sd_drift_files = sorted(glob.glob(os.path.join(sd_root,'*drift_non_aggregated*')))
-wr_drift_files = sorted(glob.glob(os.path.join(wr_root,'*drift_non_aggregated*')))
-
-
-# now, let's load one of the drift columns, 'drift_displacement_HV_deg_event_name'
-# and compute the mean for each trial
-
-sd_displacement_means = []
-wr_displacement_means = []
-
-for sd_drift_file in sd_drift_files:
-    dataset = lg.Dataset(sd_drift_file)
-    dataframe = dataset.get_df()
-    displacement_array = dataframe['drift_displacement_HV_deg_event_name']
-    displacement_mean = float(np.mean(displacement_array))
-    sd_displacement_means.append(displacement_mean)
-    
-for wr_drift_file in wr_drift_files:
-    dataset = lg.Dataset(wr_drift_file)
-    dataframe = dataset.get_df()
-    displacement_array = dataframe['drift_displacement_HV_deg_event_name']
-    displacement_mean = float(np.mean(displacement_array))
-    wr_displacement_means.append(displacement_mean)
-
-
+print(icc2)
 

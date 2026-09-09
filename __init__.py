@@ -88,7 +88,7 @@ def get_files_for_protocol(folder,protocol):
         out = out + glob.glob(os.path.join(folder,'*%s*.csv'%filt))
     return out
 
-n_header_rows = {'_distributional_aggregated':3,'_drift_non_aggregated':4,'_measurement_inform':1,'_non_distributional_parameters':1,'_pso_non_aggregated':4,'_saccade_non_aggregated':4,'_saccade_with_pso_non_aggregated':4,'_trajectories':2,'_trial_non_aggregated':4}
+n_header_rows = {'_distributional_aggregated':3,'_drift_non_aggregated':4,'_measurement_inform':1,'_non_distributional_parameters':3,'_pso_non_aggregated':4,'_saccade_non_aggregated':4,'_saccade_with_pso_non_aggregated':4,'_trajectories':2,'_trial_non_aggregated':4}
 
 
 class Dataset:
