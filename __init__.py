@@ -23,23 +23,23 @@ def get_all_date_times(folder):
     return list(set(out))
 
 
-def organize_by_protocol(folder,delete_old=False):
+def organize_by_task(folder,delete_old=False):
     # search through all the 'measurement_inform' files in a folder, and
-    # use them to create protocol subfolders and copy the csv files into those
+    # use them to create task subfolders and copy the csv files into those
     mi_files = glob.glob(os.path.join(folder,'*measurement_inform*.csv'))
     for mi_file in mi_files:
         mi_df = pd.read_csv(mi_file)
-        protocol = mi_df['protocol_name'].iloc[0]
+        task = mi_df['task_name'].iloc[0]
         date_time_stamp = get_date_time(mi_file)
-        protocol_subfolder = os.path.join(folder,protocol.replace(' ','_'))
-        os.makedirs(protocol_subfolder,exist_ok=True)
+        task_subfolder = os.path.join(folder,task.replace(' ','_'))
+        os.makedirs(task_subfolder,exist_ok=True)
         
         # fragile: are there other files that might match this filter?
         filt = date_time_stamp[0]+'*'+date_time_stamp[1]+'*'
         filt = os.path.join(folder,filt)
         matching_files = glob.glob(filt)
         for mf in matching_files:
-            out_filename = os.path.join(protocol_subfolder,os.path.split(mf)[1])
+            out_filename = os.path.join(task_subfolder,os.path.split(mf)[1])
             if delete_old:
                 shutil.move(mf,out_filename)
                 print('moving %s -> %s'%(mf,out_filename))
@@ -59,20 +59,20 @@ def folder_report(folder):
         mi_df = pd.read_csv(mi_file)
         
         patient_code = mi_df['patient_code'].iloc[0]
-        protocol_name = mi_df['protocol_name'].iloc[0]
+        task_name = mi_df['task_name'].iloc[0]
 
         # concatenate the date and time to search for every file containing each combination
         date_time = '%s_%s'%(date,time)
         file_subset = sorted(glob.glob(os.path.join(folder,'*%s*.csv'%date_time)))
         
-        report = report + '\t%s\t%s\t%s\t%s\n'%(patient_code,date,time,protocol_name)
+        report = report + '\t%s\t%s\t%s\t%s\n'%(patient_code,date,time,task_name)
         
         for subset_filename in file_subset:
             report = report + '\t\t%s\n'%subset_filename
 
     return report
 
-def get_files_for_protocol(folder,protocol):
+def get_files_for_task(folder,task):
     date_times = get_all_date_times(folder)
     out = []
     for date_time in date_times:
@@ -82,8 +82,8 @@ def get_files_for_protocol(folder,protocol):
             continue
         mi_filename = mi_filenames[0]
         mi_df = pd.read_csv(mi_filename)
-        protocol_name = mi_df['protocol_name'].iloc[0]
-        if protocol_name.find(protocol)==-1:
+        task_name = mi_df['task_name'].iloc[0]
+        if task_name.find(task)==-1:
             continue
         out = out + glob.glob(os.path.join(folder,'*%s*.csv'%filt))
     return out
