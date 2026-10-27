@@ -98,9 +98,9 @@ Note: I use the word 'terminal' in the ordinary way for Linux and Mac users, but
 
 Generally, we will try to leave the organization and names of files alone, but with the following exception. The filenames listed above, all resulting from a single trial, are identical regardless of the experimental protocol (i.e., fixation, saccade, etc.). As a first step, to clarify the relevance of the files and directions for downstream analysis, these will be reorganized according to protocol. The function `letsgo.organize_by_protocol` takes a folder as an argument, inspects the `...measurement_inform.csv` file to determine the name of the protocol, and then moves files into subfolders according to protocol.
 
-[Here is what the file structure looks like before reorganizing.](./README_files/folder_structure_before_reorganizing.txt)
+[Here is what the file structure looks like before reorganizing.](./README_files/folder_structure_before_reorganizing.md)
 
-[Here is what the file structure looks like after reorganizing.](./README_files/folder_structure_after_reorganizing.txt)
+[Here is what the file structure looks like after reorganizing.](./README_files/folder_structure_after_reorganizing.md)
 
 
 
