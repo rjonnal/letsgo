@@ -98,11 +98,25 @@ Note: I use the word 'terminal' in the ordinary way for Linux and Mac users, but
 
 Generally, we will try to leave the organization and names of files alone, but with the following exception. The filenames listed above, all resulting from a single trial, are identical regardless of the experimental protocol (i.e., fixation, saccade, etc.). As a first step, to clarify the relevance of the files and directions for downstream analysis, these will be reorganized according to protocol. The function `letsgo.organize_by_protocol` takes a folder as an argument, inspects the `...measurement_inform.csv` file to determine the name of the protocol, and then moves files into subfolders according to protocol.
 
-[Here is what the file structure looks like before reorganizing.](./README_files/folder_structure_before_reorganizing.md)
+Below are illustrations of how the folders look before and after reorganization. In both cases, only the `...measurement_inform.csv` files are shown, for clarity. Remember that for each `...measurement_inform.csv` file, there are nine files total: `...distributional_aggregated.csv`, `...drift_non_aggregated.csv`, etc.
 
-[Here is what the file structure looks like after reorganizing.](./README_files/folder_structure_after_reorganizing.md)
+[Before reorganizing.](./README_files/folder_structure_before_reorganizing.md)
 
+[After reorganizing.](./README_files/folder_structure_after_reorganizing.md)
 
+## Schemas for CSV file types
+
+Below are the CSV schemas for each of the nine file types recorded with a single measurement:
+
+* [trajectories.md](./README_files/trajectories.md)
+* [saccade_with_pso_non_aggregated.md](./README_files/saccade_with_pso_non_aggregated.md)
+* [non_distributional_parameters.md](./README_files/non_distributional_parameters.md)
+* [saccade_non_aggregated.md](./README_files/saccade_non_aggregated.md)
+* [pso_non_aggregated.md](./README_files/pso_non_aggregated.md)
+* [drift_non_aggregated.md](./README_files/drift_non_aggregated.md)
+* [trial_non_aggregated.md](./README_files/trial_non_aggregated.md)
+* [measurement_inform.md](./README_files/measurement_inform.md)
+* [distributional_aggregated.md](./README_files/distributional_aggregated.md)
 
 ## Example scripts
 

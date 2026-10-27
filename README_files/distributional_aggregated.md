@@ -1,0 +1,182 @@
+# DataFrame Documentation
+
+## Shape
+* **Rows:** 9
+* **Columns:** 164
+
+## Schema Summary
+```text
+<class 'pandas.DataFrame'>
+RangeIndex: 9 entries, 0 to 8
+Columns: 164 entries, parameter to path
+dtypes: str(164)
+memory usage: 11.7 KB
+```
+
+## Column Breakdown
+| Column Name | Data Type | Non-Null Count | Unique Values |
+| --- | --- | --- | --- |
+| **parameter** | `str` | 9 | 9 |
+| **drift_duration** | `str` | 9 | 9 |
+| **drift_displacement** | `str` | 9 | 9 |
+| **drift_displacement.1** | `str` | 9 | 9 |
+| **drift_displacement.2** | `str` | 9 | 9 |
+| **drift_diffusion_Hurst** | `str` | 8 | 8 |
+| **drift_diffusion_Hurst.1** | `str` | 8 | 8 |
+| **drift_diffusion_Hurst.2** | `str` | 8 | 8 |
+| **drift_diffusion_Hurst_r2** | `str` | 8 | 8 |
+| **drift_diffusion_Hurst_r2.1** | `str` | 8 | 8 |
+| **drift_diffusion_Hurst_r2.2** | `str` | 8 | 8 |
+| **drift_length** | `str` | 9 | 9 |
+| **drift_length.1** | `str` | 9 | 9 |
+| **drift_length.2** | `str` | 9 | 9 |
+| **drift_centroid** | `str` | 9 | 9 |
+| **drift_centroid.1** | `str` | 9 | 9 |
+| **drift_avg_speed** | `str` | 9 | 9 |
+| **drift_avg_speed.1** | `str` | 9 | 9 |
+| **drift_avg_speed.2** | `str` | 9 | 9 |
+| **drift_signal_type** | `str` | 8 | 8 |
+| **drift_mean_displacement** | `str` | 8 | 8 |
+| **drift_trial_number** | `str` | 8 | 6 |
+| **saccade_avg_acc** | `str` | 9 | 9 |
+| **saccade_avg_acc.1** | `str` | 9 | 9 |
+| **saccade_avg_acc.2** | `str` | 9 | 9 |
+| **saccade_avg_acc_dir** | `str` | 9 | 9 |
+| **saccade_avg_acc_dir.1** | `str` | 9 | 9 |
+| **saccade_avg_vel_dir** | `str` | 9 | 9 |
+| **saccade_avg_vel_dir.1** | `str` | 9 | 9 |
+| **saccade_avg_speed** | `str` | 9 | 9 |
+| **saccade_avg_speed.1** | `str` | 9 | 9 |
+| **saccade_avg_speed.2** | `str` | 9 | 9 |
+| **saccade_top_bottom_amp** | `str` | 9 | 9 |
+| **saccade_top_bottom_amp.1** | `str` | 9 | 9 |
+| **saccade_top_bottom_amp.2** | `str` | 9 | 9 |
+| **saccade_duration** | `str` | 9 | 9 |
+| **saccade_displacement** | `str` | 9 | 9 |
+| **saccade_displacement.1** | `str` | 9 | 9 |
+| **saccade_displacement.2** | `str` | 9 | 9 |
+| **saccade_init_accuracy** | `str` | 9 | 9 |
+| **saccade_init_accuracy.1** | `str` | 9 | 9 |
+| **saccade_init_accuracy.2** | `str` | 9 | 9 |
+| **saccade_length** | `str` | 9 | 9 |
+| **saccade_length.1** | `str` | 9 | 9 |
+| **saccade_length.2** | `str` | 9 | 9 |
+| **saccade_onset_acc** | `str` | 9 | 9 |
+| **saccade_onset_acc.1** | `str` | 9 | 9 |
+| **saccade_onset_acc.2** | `str` | 9 | 9 |
+| **saccade_onset_acc.3** | `str` | 9 | 9 |
+| **saccade_offset_dec** | `str` | 9 | 9 |
+| **saccade_offset_dec.1** | `str` | 9 | 9 |
+| **saccade_offset_dec.2** | `str` | 9 | 9 |
+| **saccade_offset_dec.3** | `str` | 9 | 9 |
+| **saccade_onset_times** | `str` | 9 | 9 |
+| **saccade_onset_times.1** | `str` | 9 | 9 |
+| **saccade_onset_times.2** | `str` | 9 | 9 |
+| **saccade_offset_times** | `str` | 9 | 9 |
+| **saccade_offset_times.1** | `str` | 9 | 9 |
+| **saccade_offset_times.2** | `str` | 9 | 9 |
+| **saccade_max_velocity** | `str` | 9 | 9 |
+| **saccade_max_velocity.1** | `str` | 9 | 9 |
+| **saccade_max_velocity.2** | `str` | 9 | 9 |
+| **saccade_max_velocity.3** | `str` | 9 | 9 |
+| **saccade_efficiency** | `str` | 8 | 8 |
+| **saccade_efficiency.1** | `str` | 8 | 8 |
+| **saccade_efficiency.2** | `str` | 8 | 8 |
+| **saccade_direction** | `str` | 8 | 8 |
+| **saccade_direction.1** | `str` | 8 | 6 |
+| **saccade_closer_to_target** | `str` | 8 | 6 |
+| **pso_avg_acc** | `str` | 8 | 5 |
+| **pso_avg_acc.1** | `str` | 8 | 5 |
+| **pso_avg_acc.2** | `str` | 8 | 5 |
+| **pso_avg_speed** | `str` | 8 | 5 |
+| **pso_avg_speed.1** | `str` | 8 | 5 |
+| **pso_avg_speed.2** | `str` | 8 | 5 |
+| **pso_top_bottom_amp** | `str` | 8 | 5 |
+| **pso_top_bottom_amp.1** | `str` | 8 | 5 |
+| **pso_top_bottom_amp.2** | `str` | 8 | 5 |
+| **pso_duration** | `str` | 8 | 5 |
+| **pso_displacement** | `str` | 8 | 5 |
+| **pso_displacement.1** | `str` | 8 | 5 |
+| **pso_displacement.2** | `str` | 8 | 5 |
+| **pso_init_accuracy** | `str` | 8 | 5 |
+| **pso_init_accuracy.1** | `str` | 8 | 5 |
+| **pso_init_accuracy.2** | `str` | 8 | 5 |
+| **pso_length** | `str` | 8 | 5 |
+| **pso_length.1** | `str` | 8 | 5 |
+| **pso_length.2** | `str` | 8 | 5 |
+| **pso_offset_dec** | `str` | 8 | 5 |
+| **pso_offset_dec.1** | `str` | 8 | 5 |
+| **pso_offset_dec.2** | `str` | 8 | 5 |
+| **pso_offset_dec.3** | `str` | 8 | 5 |
+| **pso_max_velocity** | `str` | 8 | 5 |
+| **pso_max_velocity.1** | `str` | 8 | 5 |
+| **pso_max_velocity.2** | `str` | 8 | 5 |
+| **pso_max_velocity.3** | `str` | 8 | 5 |
+| **pso_efficiency** | `str` | 7 | 4 |
+| **pso_efficiency.1** | `str` | 7 | 4 |
+| **pso_efficiency.2** | `str` | 7 | 4 |
+| **saccade+pso_avg_acc** | `str` | 8 | 5 |
+| **saccade+pso_avg_acc.1** | `str` | 8 | 5 |
+| **saccade+pso_avg_acc.2** | `str` | 8 | 5 |
+| **saccade+pso_avg_acc_dir** | `str` | 8 | 5 |
+| **saccade+pso_avg_acc_dir.1** | `str` | 8 | 5 |
+| **saccade+pso_avg_vel_dir** | `str` | 8 | 5 |
+| **saccade+pso_avg_vel_dir.1** | `str` | 8 | 5 |
+| **saccade+pso_avg_speed** | `str` | 8 | 5 |
+| **saccade+pso_avg_speed.1** | `str` | 8 | 5 |
+| **saccade+pso_avg_speed.2** | `str` | 8 | 5 |
+| **saccade+pso_top_bottom_amp** | `str` | 8 | 5 |
+| **saccade+pso_top_bottom_amp.1** | `str` | 8 | 5 |
+| **saccade+pso_top_bottom_amp.2** | `str` | 8 | 5 |
+| **saccade+pso_duration** | `str` | 8 | 5 |
+| **saccade+pso_displacement** | `str` | 8 | 5 |
+| **saccade+pso_displacement.1** | `str` | 8 | 5 |
+| **saccade+pso_displacement.2** | `str` | 8 | 5 |
+| **saccade+pso_init_accuracy** | `str` | 8 | 5 |
+| **saccade+pso_init_accuracy.1** | `str` | 8 | 5 |
+| **saccade+pso_init_accuracy.2** | `str` | 8 | 5 |
+| **saccade+pso_length** | `str` | 8 | 5 |
+| **saccade+pso_length.1** | `str` | 8 | 5 |
+| **saccade+pso_length.2** | `str` | 8 | 5 |
+| **saccade+pso_onset_acc** | `str` | 8 | 5 |
+| **saccade+pso_onset_acc.1** | `str` | 8 | 5 |
+| **saccade+pso_onset_acc.2** | `str` | 8 | 5 |
+| **saccade+pso_onset_acc.3** | `str` | 8 | 5 |
+| **saccade+pso_offset_dec** | `str` | 8 | 5 |
+| **saccade+pso_offset_dec.1** | `str` | 8 | 5 |
+| **saccade+pso_offset_dec.2** | `str` | 8 | 5 |
+| **saccade+pso_offset_dec.3** | `str` | 8 | 5 |
+| **saccade+pso_onset_times** | `str` | 8 | 5 |
+| **saccade+pso_onset_times.1** | `str` | 8 | 5 |
+| **saccade+pso_onset_times.2** | `str` | 8 | 5 |
+| **saccade+pso_offset_times** | `str` | 8 | 5 |
+| **saccade+pso_offset_times.1** | `str` | 8 | 5 |
+| **saccade+pso_offset_times.2** | `str` | 8 | 5 |
+| **saccade+pso_max_velocity** | `str` | 8 | 5 |
+| **saccade+pso_max_velocity.1** | `str` | 8 | 5 |
+| **saccade+pso_max_velocity.2** | `str` | 8 | 5 |
+| **saccade+pso_max_velocity.3** | `str` | 8 | 5 |
+| **saccade+pso_efficiency** | `str` | 7 | 4 |
+| **saccade+pso_efficiency.1** | `str` | 7 | 4 |
+| **saccade+pso_efficiency.2** | `str` | 7 | 4 |
+| **saccade+pso_direction** | `str` | 7 | 4 |
+| **saccade+pso_direction.1** | `str` | 7 | 3 |
+| **saccade+pso_closer_to_target** | `str` | 7 | 3 |
+| **saccade_init_latency** | `str` | 3 | 3 |
+| **saccadic_intrusions_count** | `str` | 8 | 7 |
+| **gaze_circumference** | `str` | 3 | 3 |
+| **mean_gain** | `str` | 2 | 2 |
+| **std_gain** | `str` | 2 | 2 |
+| **circumference_ratio** | `str` | 2 | 2 |
+| **pursuit_init_latency** | `str` | 3 | 3 |
+| **mean_phase** | `str` | 3 | 3 |
+| **avg_pupil_diameters** | `str` | 3 | 3 |
+| **avg_pupil_diameters.1** | `str` | 3 | 3 |
+| **BCEA68** | `str` | 3 | 3 |
+| **BCEA68.1** | `str` | 3 | 3 |
+| **BCEA95** | `str` | 3 | 3 |
+| **BCEA98** | `str` | 3 | 3 |
+| **trial_frame_start** | `str` | 8 | 6 |
+| **trial_frame_end** | `str` | 8 | 7 |
+| **patient_code** | `str` | 7 | 1 |
+| **path** | `str` | 7 | 1 |
