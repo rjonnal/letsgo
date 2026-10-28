@@ -89,7 +89,7 @@ for tf in trajectory_files:
         plt.title('%s %s %s'%(task,condition,patient_code))
         outfn = os.path.join(output_folder,
                              '%s_%s_%s.png'%(task,condition,patient_code))
-        plt.savefig(outfn,dpi=150)
+        plt.savefig(outfn,dpi=100)
         plt.pause(.1)
     except Exception as e:
         print(e)
