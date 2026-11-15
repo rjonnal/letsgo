@@ -3,6 +3,56 @@ from matplotlib import pyplot as plt
 import numpy as np
 import glob,os,sys,shutil
 import re
+import pathlib
+
+def get_all_datasets(data_root):
+    # create a path object that represents
+    # the data_root point in the file system
+    path = pathlib.Path(data_root)
+
+    # find all .csv files below this point in
+    # the file system
+    csv_files = path.rglob('*.csv')
+
+    # use get_timestamp to get all timestamps from the
+    # file list
+    all_timestamps = []
+    for csv_file in csv_files:
+        timestamp = get_timestamp(csv_file)
+        if timestamp is None:
+            continue
+        all_timestamps.append(timestamp)
+
+    # use set to extract unique matches
+    unique_timestamps = set(all_timestamps)
+
+    # output data structure
+    all_datasets = []
+
+    # instantiate a Dataset object using the list
+    # of csv files corresponding to a single recording:
+    for timestamp in unique_timestamps:
+        dataset_files = list(path.rglob('*%s*.csv'%timestamp))
+        n_files = len(dataset_files)
+        if n_files!=9:
+            print('Warning: %d files found with timestamp %s.'%(n_files,timestamp))
+        all_datasets.append(Dataset(dataset_files))
+
+    return all_datasets
+
+def get_timestamp(filename):
+    filename = str(filename)
+    date_regex = r'\d{4}-\d{2}-\d{2}'
+    time_regex = r'[_]\d{2}-\d{2}-\d{2}'
+    try:
+        date_match = re.search(date_regex,filename)
+        date = date_match.group()
+        time_match = re.search(time_regex,filename)
+        time = time_match.group()[1:]
+    except AttributeError as ae:
+        print('%s does not contain a timestamp; skipping.'%filename)
+        return None
+    return date+'_'+time
 
 def get_date_time(filename):
     date_regex = r'\d{4}-\d{2}-\d{2}'
@@ -88,23 +138,19 @@ def get_files_for_task(folder,task):
         out = out + glob.glob(os.path.join(folder,'*%s*.csv'%filt))
     return out
 
-n_header_rows = {'_distributional_aggregated':3,'_drift_non_aggregated':4,'_measurement_inform':1,'_non_distributional_parameters':3,'_pso_non_aggregated':4,'_saccade_non_aggregated':4,'_saccade_with_pso_non_aggregated':4,'_trajectories':2,'_trial_non_aggregated':4}
-
+# each csv file type has a different number of header rows
+# we need to know how many there are for each type in order
+# to convert to pandas DataFrame
+n_header_rows = {'distributional_aggregated':3,'drift_non_aggregated':4,'measurement_inform':1,'non_distributional_parameters':3,'pso_non_aggregated':4,'saccade_non_aggregated':4,'saccade_with_pso_non_aggregated':4,'trajectories':2,'trial_non_aggregated':4}
 
 class Dataset:
 
-    def __init__(self,filename,skiprows=None,delimiter='_'):
-        if skiprows is None:
+    def __init__(self,csv_file_list,delimiter='_'):
+        self.dataframe_dictionary = {}
+        for csv_file in csv_file_list:
             for k in n_header_rows.keys():
                 if filename.find(k)>-1:
-                    self.skiprows = n_header_rows[k]
-                    break
-        else:
-            self.skiprows = skiprows
-        if self.skiprows is None:
-            sys.exit('letsgo.Dataset failed on %s because the number of header rows is not defined in the dictionary n_header_rows: %s'%(filename,n_header_rows))
-        self.filename = filename
-        self.delimiter = delimiter
+                    skiprows = n_header_rows[k]
 
     def get_df(self):
         header = self.digest_header()
