@@ -151,6 +151,7 @@ class Dataset:
             for k in n_header_rows.keys():
                 if filename.find(k)>-1:
                     skiprows = n_header_rows[k]
+                    
 
     def get_df(self):
         header = self.digest_header()
