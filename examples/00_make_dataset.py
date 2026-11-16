@@ -11,3 +11,5 @@ datasets = lg.get_all_datasets(data_root)
 # recordings found in data_root
 
 
+for ds in datasets:
+    print(ds)

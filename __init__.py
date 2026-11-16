@@ -36,7 +36,7 @@ def get_all_datasets(data_root):
         n_files = len(dataset_files)
         if n_files!=9:
             print('Warning: %d files found with timestamp %s.'%(n_files,timestamp))
-        all_datasets.append(Dataset(dataset_files))
+        all_datasets.append(Dataset(dataset_files,timestamp))
 
     return all_datasets
 
@@ -145,22 +145,32 @@ n_header_rows = {'distributional_aggregated':3,'drift_non_aggregated':4,'measure
 
 class Dataset:
 
-    def __init__(self,csv_file_list,delimiter='_'):
+    def __init__(self,csv_file_list,timestamp,header_delimiter='_'):
         self.dataframe_dictionary = {}
+        self.filename_dictionary = {}
+        self.header_delimiter = header_delimiter
+        self.timestamp = timestamp
         for csv_file in csv_file_list:
+            csv_file = str(csv_file)
             for k in n_header_rows.keys():
-                if filename.find(k)>-1:
+                if csv_file.find(k)>-1:
                     skiprows = n_header_rows[k]
-                    
+                    header = self.digest_header(csv_file,skiprows)
+                    self.filename_dictionary[k] = csv_file
+                    self.dataframe_dictionary[k] = pd.read_csv(csv_file,skiprows=skiprows,names=header)
+        midf = self.dataframe_dictionary['measurement_inform']
+        self.patient_code = midf['patient_code'].iloc[0]
+        self.eye = midf['which_eye'].iloc[0]
+        self.task = midf['protocol_name'].iloc[0]
 
-    def get_df(self):
-        header = self.digest_header()
-        df = pd.read_csv(self.filename,skiprows=self.skiprows,header=None,names=header)
-        return df
-    
-        
-    def digest_header(self):
-        header_df = pd.read_csv(self.filename,nrows=self.skiprows,header=None)
+    def __str__(self):
+        return '%s / %s / %s / %s'%(self.timestamp,
+                                    self.patient_code,
+                                    self.eye,
+                                    self.task)
+                    
+    def digest_header(self,csv_file,skiprows):
+        header_df = pd.read_csv(csv_file,nrows=skiprows,header=None)
         header_data = []
         row_lengths = []
         for idx,row in header_df.iterrows():
@@ -184,7 +194,7 @@ class Dataset:
                 last = item
 
         for col_idx in range(ncols):
-            columns.append(self.delimiter.join([r[col_idx] for r in header_data if len(r[col_idx])]))
+            columns.append(self.header_delimiter.join([r[col_idx] for r in header_data if len(r[col_idx])]))
 
         for idx,col in enumerate(columns):
             if idx==0:
