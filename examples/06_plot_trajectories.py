@@ -82,4 +82,4 @@ for ds in datasets:
     outfn = os.path.join(output_folder,
                          '%s_%s_%s_%s.png'%(ds.task,ds.condition,ds.patient_code,ds.timestamp))
     plt.savefig(outfn,dpi=100)
-    plt.pause(.1)
+    plt.pause(1)
