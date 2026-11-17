@@ -22,6 +22,10 @@ def get_all_datasets(data_root):
     for mi_file in mi_files:
         all_datasets.append(Dataset(mi_file))
 
+    label_datasets_with_condition_and_session(all_datasets)
+
+    all_datasets.sort()
+    
     return all_datasets
 
 def get_timestamp(filename):
@@ -37,6 +41,31 @@ def get_timestamp(filename):
         print('%s does not contain a timestamp; skipping.'%filename)
         return None
     return date+'_'+time
+
+
+def label_datasets_with_condition_and_session(dataset_list):
+    # a regex pattern that returns 5 groups of characters:
+    # 1) the head of the location (everything before the session folder), any string (.*)
+    # 2) the digits of the patient ID (not used, but could be used for integrity-check) (\d+)
+    # 3) the condition--any string (.*)
+    # 4) the digits of the session (\d+)
+    # 5) the tail of the location (everthing after the session number) (.*)
+    pattern = re.compile(r"(.*)NeuroSleep_(\d+)_(.*)_(\d+)(.*)")
+
+    # Now iterate through and label the datasets by condition, and add
+    # the condition as a property. We also add the session number. Both
+    # use regex matching on the filename.
+    for ds in dataset_list:
+        loc = ds.dataset_location
+        match = None
+        for tok in path_parts(loc):
+            match = pattern.match(loc)
+            if match:
+                break
+        h,patient_id_number,condition,session,t = match.groups()
+        ds.condition = condition
+        ds.session = int(session)
+
 
 def get_date_time(filename):
     date_regex = r'\d{4}-\d{2}-\d{2}'
@@ -122,6 +151,11 @@ def get_files_for_task(folder,task):
         out = out + glob.glob(os.path.join(folder,'*%s*.csv'%filt))
     return out
 
+
+def path_parts(s):
+    p = pathlib.Path(s)
+    return list(p.parts)
+
 # each csv file type has a different number of header rows
 # we need to know how many there are for each type in order
 # to convert to pandas DataFrame
@@ -138,23 +172,36 @@ class Dataset:
 
         csv_filter = os.path.join(self.dataset_location,self.timestamp)+'*.csv'
         csv_file_list = glob.glob(csv_filter)
+        
         for csv_file in csv_file_list:
             csv_file = str(csv_file)
             for k in n_header_rows.keys():
-                if k=='trajectories':
-                    if not load_trajectories:
-                        continue
                 if csv_file.find(k)>-1:
-                    skiprows = n_header_rows[k]
-                    header = self.digest_header(csv_file,skiprows)
                     self.filename_dictionary[k] = csv_file
-                    self.dataframe_dictionary[k] = pd.read_csv(csv_file,skiprows=skiprows,names=header)
-        midf = self.dataframe_dictionary['measurement_inform']
+                    
+        midf = self.get_dataframe('measurement_inform')
         self.patient_code = midf['patient_code'].iloc[0]
         self.eye = midf['which_eye'].iloc[0]
         self.task = midf['protocol_name'].iloc[0]
         self.condition = None
-        
+        self.session = -1
+
+    def list_dataframes(self):
+        for k in n_header_rows.keys():
+            print('%s: '%k,end='')
+            try:
+                csv_filename = self.filename_dictionary[k]
+            except KeyError as ke:
+                csv_filename = 'not found'
+            print(csv_filename)
+
+    def get_dataframe(self,dataframe_key):
+        skiprows = n_header_rows[dataframe_key]
+        filename = self.filename_dictionary[dataframe_key]
+        header = self.digest_header(filename,skiprows)
+        df = pd.read_csv(filename,skiprows=skiprows,names=header)
+        return df
+
     def __str__(self):
         out = ''
         out = out + 'location: %s\n'%self.dataset_location
@@ -162,7 +209,11 @@ class Dataset:
         out = out + 'subject: %s\n'%self.patient_code
         out = out + 'task: %s\n'%self.task
         out = out + 'condition: %s\n'%self.condition
+        out = out + 'session: %d\n'%self.session
         return out
+
+    def __gt__(self,other):
+        return self.__str__().__gt__(other.__str__())
 
     def __repr__(self):
         return self.__str__().replace('\n',' / ')
