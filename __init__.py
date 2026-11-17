@@ -10,33 +10,17 @@ def get_all_datasets(data_root):
     # the data_root point in the file system
     path = pathlib.Path(data_root)
 
-    # find all .csv files below this point in
+    # find all *measurement_inform.csv files below this point in
     # the file system
-    csv_files = path.rglob('*.csv')
+    mi_files = path.rglob('*measurement_inform.csv')
 
-    # use get_timestamp to get all timestamps from the
-    # file list
-    all_timestamps = []
-    for csv_file in csv_files:
-        timestamp = get_timestamp(csv_file)
-        if timestamp is None:
-            continue
-        all_timestamps.append(timestamp)
-
-    # use set to extract unique matches
-    unique_timestamps = set(all_timestamps)
+    mi_files = [str(mi_file) for mi_file in mi_files]
 
     # output data structure
     all_datasets = []
 
-    # instantiate a Dataset object using the list
-    # of csv files corresponding to a single recording:
-    for timestamp in unique_timestamps:
-        dataset_files = list(path.rglob('*%s*.csv'%timestamp))
-        n_files = len(dataset_files)
-        if n_files!=9:
-            print('Warning: %d files found with timestamp %s.'%(n_files,timestamp))
-        all_datasets.append(Dataset(dataset_files,timestamp))
+    for mi_file in mi_files:
+        all_datasets.append(Dataset(mi_file))
 
     return all_datasets
 
@@ -145,14 +129,21 @@ n_header_rows = {'distributional_aggregated':3,'drift_non_aggregated':4,'measure
 
 class Dataset:
 
-    def __init__(self,csv_file_list,timestamp,header_delimiter='_'):
+    def __init__(self,mi_file,header_delimiter='_',load_trajectories=False):
         self.dataframe_dictionary = {}
         self.filename_dictionary = {}
         self.header_delimiter = header_delimiter
-        self.timestamp = timestamp
+        self.timestamp = get_timestamp(mi_file)
+        self.dataset_location = os.path.split(mi_file)[0]
+
+        csv_filter = os.path.join(self.dataset_location,self.timestamp)+'*.csv'
+        csv_file_list = glob.glob(csv_filter)
         for csv_file in csv_file_list:
             csv_file = str(csv_file)
             for k in n_header_rows.keys():
+                if k=='trajectories':
+                    if not load_trajectories:
+                        continue
                 if csv_file.find(k)>-1:
                     skiprows = n_header_rows[k]
                     header = self.digest_header(csv_file,skiprows)
@@ -162,12 +153,19 @@ class Dataset:
         self.patient_code = midf['patient_code'].iloc[0]
         self.eye = midf['which_eye'].iloc[0]
         self.task = midf['protocol_name'].iloc[0]
-
+        self.condition = None
+        
     def __str__(self):
-        return '%s / %s / %s / %s'%(self.timestamp,
-                                    self.patient_code,
-                                    self.eye,
-                                    self.task)
+        out = ''
+        out = out + 'location: %s\n'%self.dataset_location
+        out = out + 'timestamp: %s\n'%self.timestamp
+        out = out + 'subject: %s\n'%self.patient_code
+        out = out + 'task: %s\n'%self.task
+        out = out + 'condition: %s\n'%self.condition
+        return out
+
+    def __repr__(self):
+        return self.__str__().replace('\n',' / ')
                     
     def digest_header(self,csv_file,skiprows):
         header_df = pd.read_csv(csv_file,nrows=skiprows,header=None)

@@ -1,15 +1,10 @@
 import letsgo as lg
 
-"""This script illustrates how to list all the data sets
-and create a Dataset object using the time stamp from one
-of them."""
+"""This script illustrates how to create a single Dataset
+object by passing its constructor a XXX_measurement_inform.csv
+file."""
 
-data_root = '/home/rjonnal/Dropbox/Data/eye_tracking/'
+mi_filename = '/home/rjonnal/Dropbox/Data/eye_tracking/NeuroSleep_011/NeuroSleep_011_SD_01/2026-06-17_12-59-44_measurement_inform.csv'
 
-datasets = lg.get_all_datasets(data_root)
-# should provide a list of Dataset objects corresponding to all
-# recordings found in data_root
+dataset = lg.Dataset(mi_filename)
 
-
-for ds in datasets:
-    print(ds)
