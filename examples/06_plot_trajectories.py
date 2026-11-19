@@ -28,8 +28,8 @@ pcfg.setup()
 # │   │   ├── 2026-07-09_13-14-14_saccade_non_aggregated.csv
 
 data_root = cfg.data_root
-output_folder = cfg.output_folder
-os.makedirs(output_folder,exist_ok=True)
+figure_folder = cfg.figure_folder
+os.makedirs(figure_folder,exist_ok=True)
 
 datasets = lg.get_all_datasets(data_root)
 
@@ -79,7 +79,7 @@ for ds in datasets:
     plt.ylabel('y (deg)')
     plt.axis('equal')
     plt.title('%s\n%s %s %s'%(ds.task,ds.condition,ds.patient_code,ds.timestamp))
-    outfn = os.path.join(output_folder,
+    outfn = os.path.join(figure_folder,
                          '%s_%s_%s_%s.png'%(ds.task,ds.condition,ds.patient_code,ds.timestamp))
     plt.savefig(outfn,dpi=100)
     plt.pause(1)

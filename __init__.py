@@ -254,3 +254,44 @@ class Dataset:
 
         return columns
 
+    def get_aggregated_params(self):
+        # return a dictionary containing name-value pairs
+        # each name is a tuple (A,B), where
+        # A is the name of a column in distributional_aggregated
+        # and B is the aggregation method (MEAN, STD, etc.)
+        # or (A,None), where A is the name of a column in
+        # non_distributional_parameters
+        # each value is the corresponding value
+        out = {}
+        out['patient_code'] = self.patient_code
+        out['task'] = self.task
+        out['session'] = self.session
+        out['timestamp'] = self.timestamp
+        out['condition'] = self.condition
+        out['eye'] = self.eye
+        out['dataset_location'] = self.dataset_location
+        
+        df = self.get_dataframe('distributional_aggregated')
+        columns = [str(item) for item in df.columns]
+        rows = list(df['parameter_axis_unit'])
+        for c in columns:
+            if c=='parameter_axis_unit':
+                continue
+            for r in rows:
+                key = (c,r)
+                value = df[df['parameter_axis_unit']==r][c].iloc[0]
+                if type(value)==np.float64:
+                    value=float(value)
+                out[key] = value
+
+        df = self.get_dataframe('non_distributional_parameters')
+        columns = [str(item) for item in df.columns]
+        for c in columns:
+            if c=='parameter_axis_unit':
+                continue
+            key = (c,None)
+            value = df[c].iloc[0]
+            out[key] = value
+
+        
+        return out
