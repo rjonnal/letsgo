@@ -51,6 +51,7 @@ for task in tasks:
     for condition in conditions:
         # calculate ICCs separately for each task-condition combination
         counter = {}
+        icc_df = []
         for patient_code in patient_codes:
             for session in sessions:
                 subdf = df[(df['task']==task) &
@@ -58,8 +59,9 @@ for task in tasks:
                            (df['session']==session) &
                            (df['patient_code']==patient_code)]
                 counter[(patient_code,session)] = len(subdf)
-        print(np.min(list(counter.values())))
-        sys.exit()
+        min_trials = np.min(list(counter.values()))
+        if min_trials>=2:
+            
 
 
     
