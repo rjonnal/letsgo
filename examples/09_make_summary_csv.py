@@ -3,8 +3,9 @@ import config as cfg
 import pandas as pd
 import sys,os
 
-"""This script lists all of the available parameters (aggregated dependent
-variables) available in a given recording."""
+"""This script gets all of the available parameters (aggregated dependent
+variables) from a set of recordings (everything located below cfg.data_root),
+and stores them all in a single CSV file."""
 
 datasets = lg.get_all_datasets(cfg.data_root)
 
