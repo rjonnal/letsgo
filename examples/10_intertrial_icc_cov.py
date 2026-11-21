@@ -3,6 +3,7 @@ import config as cfg
 import pandas as pd
 import numpy as np
 import sys,os
+import pingouin as pg
 
 """This script gets all of the available parameters (aggregated dependent
 variables) from a set of recordings (everything located below cfg.data_root),
@@ -36,6 +37,8 @@ except FileNotFoundError:
 # get the columns of df that are numerical
 params = []
 for col in df.columns:
+    if col in ['session']:
+        continue
     dtype = df[col].dtype
     if dtype in ['float64','int64']:
         params.append(col)
@@ -57,11 +60,35 @@ for task in tasks:
                 subdf = df[(df['task']==task) &
                            (df['condition']==condition) &
                            (df['session']==session) &
-                           (df['patient_code']==patient_code)]
-                counter[(patient_code,session)] = len(subdf)
-        min_trials = np.min(list(counter.values()))
-        if min_trials>=2:
+                           (df['patient_code']==patient_code)].copy()
+                n_trials = len(subdf)
+                counter[(patient_code,session)] = n_trials
+                subdf['trial'] = np.arange(n_trials)
+                subdf['n_trials'] = [n_trials]*n_trials
+                icc_df.append(subdf)
+
+        icc_df = pd.concat(icc_df)
+        icc_df = icc_df[icc_df['n_trials']>=2]
+        min_trials = np.min(icc_df['n_trials'])
+        icc_df = icc_df[icc_df['trial']<min_trials]
+        for param in params:
             
+            try:
+                icc_results_all = pg.intraclass_corr(data=icc_df,
+                                                 targets='patient_code',
+                                                 raters='trial',
+                                                 ratings=param)
+            
+                # see comment in https://github.com/raphaelvallat/pingouin/issues/485 suggesting
+                # that ICC2 (what we want for reliability testing) is called 'ICC(A,1)'
+                icc2 = icc_results_all[icc_results_all['Type']=='ICC(A,1)']
+                result = float(icc2['ICC'].iloc[0])
+            except (ValueError,AssertionError) as e:
+                print(e)
+                result = 'error'
+                
+
+            print(param,min_trials,result)
 
 
     
